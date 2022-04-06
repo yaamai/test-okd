@@ -18,16 +18,25 @@ main() {
   ip addr add dev $interface $server_ip/$server_prefix_len || true
   ip link set dev $interface up || true
 
-  sed 's$__SERVER__$'$server_url'$g' -i $PWD/tftpboot/pxelinux.cfg/default
+  sed 's$__SERVER__$'$server_url'$g' -i $PWD/tftpboot/pxelinux.cfg/*
 
   dnsmasq \
     -d \
     -R \
     -z \
+    --no-hosts \
+    --log-debug \
+    --log-queries \
+    -E \
     -i $interface \
     -F $subnet \
     --enable-tftp \
     --tftp-root=$PWD/tftpboot \
+    --dhcp-hostsfile=$PWD/hosts \
+    --local=/local/ \
+    --domain=local \
+    --domain-needed \
+    --conf-dir=$PWD/dnsmasq \
     --dhcp-boot=/pxelinux.0 &
 
   cd $PWD/http && python3 -m http.server &

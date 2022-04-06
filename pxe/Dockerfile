@@ -17,7 +17,6 @@ ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
 WORKDIR /pxe
 RUN cp /usr/share/syslinux/*c32 /pxe/tftpboot && cp /usr/share/syslinux/pxelinux.0 /pxe/tftpboot
 
-COPY default /pxe/tftpboot/pxelinux.cfg
 COPY entrypoint.sh /
 
 # 
