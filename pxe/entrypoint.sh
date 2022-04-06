@@ -32,11 +32,12 @@ main() {
     -F $subnet \
     --enable-tftp \
     --tftp-root=$PWD/tftpboot \
-    --dhcp-hostsfile=$PWD/hosts \
+    --dhcp-hostsdir=/dnsmasq/hosts \
+    --dhcp-leasefile=/dnsmasq/leases \
     --local=/local/ \
     --domain=local \
     --domain-needed \
-    --conf-dir=$PWD/dnsmasq \
+    --conf-dir=/dnsmasq,*.conf \
     --dhcp-boot=/pxelinux.0 &
 
   cd $PWD/http && python3 -m http.server &

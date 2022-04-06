@@ -1,0 +1,11 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+entryPoints:
+  kubeapi:
+    address: 10.101.101.1:6443
+  machineconfapi:
+    address: 10.101.101.1:22623
+providers:
+  file:
+    directory: "/traefik/conf"

@@ -1,0 +1,30 @@
+tcp:
+  routers:
+    kubeapi:
+      entryPoints:
+        - "kubeapi"
+      rule: "HostSNI(`*`)"
+      service: "kubeapi"
+  services:
+    kubeapi:
+      loadBalancer:
+        servers:
+        - address: "10.101.101.48:6443"
+        - address: "10.101.101.49:6443"
+        - address: "10.101.101.50:6443"
+        - address: "10.101.101.111:6443"
+
+  routers:
+    machineconfapi:
+      entryPoints:
+        - "machineconfapi"
+      rule: "HostSNI(`*`)"
+      service: "machineconfapi"
+  services:
+    machineconfapi:
+      loadBalancer:
+        servers:
+        - address: "10.101.101.48:22623"
+        - address: "10.101.101.49:22623"
+        - address: "10.101.101.50:22623"
+        - address: "10.101.101.111:22623"
