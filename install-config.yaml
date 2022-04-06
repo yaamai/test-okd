@@ -1,0 +1,23 @@
+apiVersion: v1
+baseDomain: example.com
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+metadata:
+  name: test
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  none: {}
+pullSecret: '{"auths": {"": {"auth": ""}}}'
+sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8EfGz0kXtI/h6rXXpNMYOfgcacVt4nx2uQYrIl4if08UaoIGqM28obY3rrxih711MwJ/QVN6n2bLTp87Pz+rxQXj4EIX69JnBJ3LT91qHDCrjlMV1CVFtvpd8un1FE9+kYFi5+wjpJnTXPkbRj/hKktO1yNHpJ3YpoYvNgG7iYHktf1ZpoW5xNhNGjRM6N9CPWsxkxiAcbP0eATlszPfnWuAmBWjZdN6Mfi+92K/dJtEbBd+g4GWeo7i12WEV2BOR1JTn95QUJDKfgtp4a1lBUSnlJbaBt1/Mz6S+sED4RMror/Fj3xcOklZVBWSfs2jcWCA3YFwixTHmyMKutmDDj4IfYKpAf4IuGlqulynmhH1pQeBTCf4fVykKGqsq+O0hfe/Sj8h53iHdMcIjubJYmq/AihpI1v+MDm4zcWXUQLH1QaFRodjMoYwSkDguGrLG4ATsapVo1/GPXviSn7ZdfZrFBMPC3TbPg7ZDEGUB/w5AtO+gSo7VPGT/kD3XM3U= debian@ws
