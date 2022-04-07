@@ -6,6 +6,12 @@ sudo ip link add br0 type bridge
 sudo ip link set dev br0 up
 ```
 
+## build infra container image
+```
+docker build vm/ -t localhost/yaamai/container-vm:latest
+docker build pxe/ -t localhost/yaamai/container-vm-pxe:latest
+```
+
 ## Launch PXE/LB infra containers
 ```
 docker run --privileged --net host --rm -it -v $PWD/inst:/pxe/http/gen -v $PWD/pxeconf:/pxe/tftpboot/pxelinux.cfg -v $PWD/dnsmasq:/dnsmasq localhost/yaamai/container-vm-pxe:latest
@@ -76,10 +82,12 @@ INFO Waiting up to 20m0s (until 1:37AM) for the Kubernetes API at https://api.te
 ```
 
 ## Launch Bootstrap and Master VMs
+```
 docker run --rm --net host --name bootstrap --hostname bootstrap --privileged -it -v /dev/kvm:/dev/kvm -v $PWD:/work -w /work -e DATA_DIR_BASE=/work/vmdata -e VM_ASSIGN_PORTS=1 -e VM_BRIDGE=br0 -e BRIDGE_PXE=1 -e VM_CPU=8 -e VM_MEMORY=8192 -e VM_USERNET=0 localhost/yaamai/container-vm:latest
 docker run --rm --net host --name master0 --hostname master0 --privileged -it -v /dev/kvm:/dev/kvm -v $PWD:/work -w /work -e DATA_DIR_BASE=/work/vmdata -e VM_ASSIGN_PORTS=1 -e VM_BRIDGE=br0 -e BRIDGE_PXE=1 -e VM_CPU=8 -e VM_MEMORY=16384 -e VM_USERNET=0 localhost/yaamai/container-vm:latest
 docker run --rm --net host --name master1 --hostname master1 --privileged -it -v /dev/kvm:/dev/kvm -v $PWD:/work -w /work -e DATA_DIR_BASE=/work/vmdata -e VM_ASSIGN_PORTS=1 -e VM_BRIDGE=br0 -e BRIDGE_PXE=1 -e VM_CPU=8 -e VM_MEMORY=16384 -e VM_USERNET=0 localhost/yaamai/container-vm:latest
 docker run --rm --net host --name master2 --hostname master2 --privileged -it -v /dev/kvm:/dev/kvm -v $PWD:/work -w /work -e DATA_DIR_BASE=/work/vmdata -e VM_ASSIGN_PORTS=1 -e VM_BRIDGE=br0 -e BRIDGE_PXE=1 -e VM_CPU=8 -e VM_MEMORY=16384 -e VM_USERNET=0 localhost/yaamai/container-vm:latest
+```
 
 ## check bootstrapping status
 ```
