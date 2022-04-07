@@ -14,10 +14,10 @@ networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
-  networkType: OVNKubernetes
+  networkType: OpenShiftSDN
   serviceNetwork:
   - 172.30.0.0/16
 platform:
   none: {}
-pullSecret: '{"auths": {"": {"auth": ""}}}'
-sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8EfGz0kXtI/h6rXXpNMYOfgcacVt4nx2uQYrIl4if08UaoIGqM28obY3rrxih711MwJ/QVN6n2bLTp87Pz+rxQXj4EIX69JnBJ3LT91qHDCrjlMV1CVFtvpd8un1FE9+kYFi5+wjpJnTXPkbRj/hKktO1yNHpJ3YpoYvNgG7iYHktf1ZpoW5xNhNGjRM6N9CPWsxkxiAcbP0eATlszPfnWuAmBWjZdN6Mfi+92K/dJtEbBd+g4GWeo7i12WEV2BOR1JTn95QUJDKfgtp4a1lBUSnlJbaBt1/Mz6S+sED4RMror/Fj3xcOklZVBWSfs2jcWCA3YFwixTHmyMKutmDDj4IfYKpAf4IuGlqulynmhH1pQeBTCf4fVykKGqsq+O0hfe/Sj8h53iHdMcIjubJYmq/AihpI1v+MDm4zcWXUQLH1QaFRodjMoYwSkDguGrLG4ATsapVo1/GPXviSn7ZdfZrFBMPC3TbPg7ZDEGUB/w5AtO+gSo7VPGT/kD3XM3U= debian@ws
+pullSecret: '{"auths":{"fake":{"auth": "Zm9vOmJhcgo="}}}'
+sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDWB+KCxrnhCCfncvjDtPM6IPuTc0FjXZ9rw+0+iwB1m1FabDxhzZYUalv89KugMdd1YGQ2rF+MN3CHxI/Yo6M43BEoPKL2bdJSlKf35TzukdfG+vvDPK78mIuHtNlJ7zfCKZpsOvmz51j2PVtPCYlMh+DkeJoA3pd4bAB2Sm8pkw3d+pDm+dh6n6qsO5QYO7HAML+8xm19IGET64DEuwtCl9lRZYExkfGqYg+FZVUCIuXE+leHRLDJSnbNgBIxSO5KVartdB0I6XR5s3qya9wb+6edtHTMIiU6gA4Fm1o725IOqccZt+piPnnqG7Xb/2JIGisd7/FyCphTu1mmdjv+XRteTUegjx4Hs73DyCsIbiDp7nQ5DRhvDmiOxdmirJwq/BwZeTmTlTMymQwVkU+uzEtlU7srG2RYIlqrwsYDwWxLLmHFanhZZ6DC75yR0j0d1bqAF6ELA/3GiPwUfBQhxANnQSRkApHBe7t28ecHtu5pcjCk17YCI6pbCDZhY8E= debian@ws

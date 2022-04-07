@@ -1,6 +1,9 @@
 FROM alpine as images
 RUN apk add --update curl
 RUN mkdir -p /work/ && cd /work &&\
+    curl -LO https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/35.20220116.2.0/x86_64/fedora-coreos-35.20220116.2.0-live-kernel-x86_64 &&\
+    curl -LO https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/35.20220116.2.0/x86_64/fedora-coreos-35.20220116.2.0-live-initramfs.x86_64.img &&\
+    curl -LO https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/35.20220116.2.0/x86_64/fedora-coreos-35.20220116.2.0-live-rootfs.x86_64.img &&\
     curl -LO https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/35.20220313.3.1/x86_64/fedora-coreos-35.20220313.3.1-live-kernel-x86_64 &&\
     curl -LO https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/35.20220313.3.1/x86_64/fedora-coreos-35.20220313.3.1-live-initramfs.x86_64.img &&\
     curl -LO https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/35.20220313.3.1/x86_64/fedora-coreos-35.20220313.3.1-live-rootfs.x86_64.img
