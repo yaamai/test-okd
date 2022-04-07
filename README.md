@@ -1,15 +1,21 @@
 ## Setup NW
-$ sudo iptables -P FORWARD ACCEPT
-$ sudo iptables -t nat -I POSTROUTING -s 10.101.101.0/24 -j MASQUERADE
-$ sudo ip link add br0 type bridge
-$ sudo ip link set dev br0 up
+```
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -t nat -I POSTROUTING -s 10.101.101.0/24 -j MASQUERADE
+sudo ip link add br0 type bridge
+sudo ip link set dev br0 up
+```
 
 ## Launch PXE/LB infra containers
-$ docker run --privileged --net host --rm -it -v $PWD/inst:/pxe/http/gen -v $PWD/pxeconf:/pxe/tftpboot/pxelinux.cfg -v $PWD/dnsmasq:/dnsmasq localhost/yaamai/container-vm-pxe:latest
-$ docker run --name lb --rm --net host -it -v $PWD/lb:/usr/local/etc/haproxy:ro haproxy:2.5
+```
+docker run --privileged --net host --rm -it -v $PWD/inst:/pxe/http/gen -v $PWD/pxeconf:/pxe/tftpboot/pxelinux.cfg -v $PWD/dnsmasq:/dnsmasq localhost/yaamai/container-vm-pxe:latest
+docker run --name lb --rm --net host -it -v $PWD/lb:/usr/local/etc/haproxy:ro haproxy:2.5
+```
 
 ## Launch workstation VM
+```
 $ docker run --rm --net host --name ws --hostname ws --privileged -it -v /dev/kvm:/dev/kvm -v $PWD:/work -w /work -e DATA_DIR_BASE=/work/vmdata -e VM_ASSIGN_PORTS=1 -e VM_BRIDGE=br0 -e BRIDGE_PXE=1 -e VM_MEMORY=1024 -e USERNET=0 localhost/yaamai/container-vm:latest bin/debian-11-generic-amd64.qcow2
+```
 
 ## Start bootstrap OKD
 ###
@@ -77,183 +83,20 @@ docker run --rm --net host --name master2 --hostname master2 --privileged -it -v
 
 ## check bootstrapping status
 ```
-    1  ls
-    2  ls /mnt/
-    3  tar xf /mnt/bin/openshift-install-linux-4.10.0-0.okd-2022-03-07-131213.tar.gz
-    4  rm -r /mnt/inst
-    5  mkdir /mnt/inst
-    6  cp /mnt/install-config.yaml /mnt/inst/
-    7  ./openshift-install --dir /mnt/inst create manifests
-    8  ./openshift-install --dir /mnt/inst create ignition-configs
-    9  ls /mnt/inst/
-   10  ./openshift-install --dir /mnt/inst wait
-   11  ./openshift-install --dir /mnt/inst wait-for
-   12  ./openshift-install --dir /mnt/inst wait-for bootstrap-complete
-   13  ls
-   14  rm /mnt/inst/*
-   15  rm -r /mnt/inst/*
-   16  rm -r /mnt/inst/.*
-   17  ./openshift-install --dir /mnt/inst create manifests
-   18  cp /mnt/install-config.yaml /mnt/inst
-   19  ./openshift-install --dir /mnt/inst create manifests
-   20  vim /mnt/inst/manifests/cluster-scheduler-02-config.yml
-   21  ./openshift-install --dir /mnt/inst create ignition-configs
-   22  ./openshift-install --dir /mnt/inst wait-for bootstrap-complete
-   23  ./openshift-install --dir /mnt/inst wait-for bootstrap-complete --log-level debug
-   24  ls
-   25  tar xf /mnt/bin/openshift-client-linux-4.10.0-0.okd-2022-03-07-131213.tar.gz
-   26  ./oc adm node-logs --role=master -u kubelet
-   27  export KUBECONFIG=/mnt/inst/auth/kubeconfig
-   28  ./oc adm node-logs --role=master -u kubelet
-   29  ./openshift-install --dir /mnt/inst wait-for bootstrap-complete --log-level debug
-   30  rm -r /mnt/inst/.*
-   31  rm -r /mnt/inst/*
-   32  vim /mnt/install-config.yaml
-   33  ls
-   34  ls -alh /mnt/inst
-   35  ./openshift-install --dir /mnt/inst create manifests
-   36  cp /mnt/install-config.yaml /mnt/inst
-   37  ./openshift-install --dir /mnt/inst create manifests
-   38  ./openshift-install --dir /mnt/inst create ignition-configs
-   39  ls -alh
-   40  ls -alh /mnt/bin/
-   41  ./openshift-install --dir /mnt/inst wait-for bootstrap-complete --log-level debug
-   42  ls
-   43  ls /mnt/bin/
-   44  cd /mnt/bin/
-   45  curl -LO https://github.com/openshift/okd/releases/download/4.10.0-0.okd-2022-03-07-131213/sha256sum.txt
-   46  sha256sum -h
-   47  sha256sum --help@
-   48  sha256sum --help
-   49  sha256sum -c
-   50  sha256sum -c sha256sum.txt
-   51  ls
-   52  cd
-   53  ls
-   54  ./oc adm release info quay.io/openshift/okd:4.10.0-0.okd-2022-03-07-131213
-   55  ./oc adm release info quay.io/openshift/okd:4.10.0-0.okd-2022-03-07-131213 --image-for=installer
-   56  ls
-   57  ls
-   58  ssh core@bootstrap
-   59  ssh -vvvv core@bootstrap
-   60  ssh -vvvv core@master0
-   61  ssh -vvvv core@bootstrap
-   62  ssh-keygen
-   63  vim /mnt/install-config.yaml
-   64  rm -r /mnt/inst/*
-   65  rm -r /mnt/inst/.*
-   66  ls /mnt/inst
-   67  ls /mnt/inst -alh
-   68  cp /mnt/install-config.yaml /mnt/inst/
-   69  ./openshift-install --dir /mnt/inst create manifests
-   70  ./openshift-install --dir /mnt/inst create ignition-configs
-   71  ssh -vvvv core@bootstrap
-   72  ssh core@bootstrap
-   73  ssh core@master0
-   74  ssh core@bootstrap
-   75  ssh core@master0
-   76  ssh core@bootstrap
-   77  ssh core@master0
-   78  ssh core@bootstrap
-   79  ssh core@master0
-   80  ssh core@master1
-   81  ssh core@master2
-   82  ssh core@bootstrap
-   83  ssh-keygen -R bootstrap
-   84  ssh core@bootstrap
-   85  ./oc adm node-logs --role=master -u kubelet
-   86  export KUBECONFIG=/mnt/inst/auth/kube
-   87  export KUBECONFIG=/mnt/inst/auth/kubeconfig
-   88  ./oc adm node-logs --role=master -u kubelet
-   89  ping api-int
-   90  ping api-int.test.example.com
-   91  ping api.test.example.com
-   92  curl -vkLo- https://api.test.example.com
-   93  curl -vkLo- https://api.test.example.com:6443
-   94  ./oc adm node-logs --role=master -u kubelet
-   95  ssh core@bootstrap
-   96  ssh-keygen -R bootstrap
-   97  ssh core@bootstrap
-   98  ssh core@master0
-   99  ssh-keygen -R master0
-  100  ssh core@master0
-  101  ./oc adm node-logs --role=master -u kubelet
-  102  tail -f /mnt/inst/.openshift_install
-  103  tail -f /mnt/inst/.openshift_install.log
-  104  vim /mnt/inst/.openshift_install.log
-  105  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  106  ssh core@master0
-  107  ssh core@bootstrap
-  108  ssh-keygen -R master0
-  109  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  110  ssh-keygen -R master0
-  111  ssh-keygen -R bootstrap
-  112  ssh-keygen -R master0
-  113  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  114  ssh core@bootstrap
-  115  ./oc get nodes
-  116  ./oc get nodes -h
-  117  ./oc -hs
-  118  ./oc -hs
-  119  ./oc -h
-  120  ./oc --help
-  121  ./oc status
-  122  ./oc get nodes
-  123  ./oc get cluster-info
-  124  ssh core@master0
-  125  ssh-keygen -R bootstrap
-  126  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  127  ssh core@master0
-  128  ssh-keygen -R master0
-  129  ssh core@master0
-  130  ssh-keygen -R bootstrap
-  131  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  132  ssh core@bootstrap journalctl -b -f -u crio
-  133  ssh core@bootstrap journalctl -b -r -u crio
-  134  ssh core@bootstrap
-  135  ssh-keygen -R bootstrap
-  136  ssh core@bootstrap journalctl -b -f -u bootkube.service
-  137  ls
-  138  ./oc get cluster-info
-  139  export KUBECONFIG=/mnt/inst/auth/kubeconfig
-  140  ./oc get cluster-info
-  141  ./oc get nodes
-  142  ./oc get nodes -o wide
-  143  ./oc get pods | grep Runn | wc -l
-  144  ./oc get pods -A | grep Runn | wc -l
-  145  ./oc get nodes -o wide
-  146  df -h
-  147  ./oc get nodes -o wide
-  148  ssh-keygen -R bootstrap
-  149  ssh core@bootstrap
-  150  ./oc get nodes -o wide
-  151  ssh core@bootstrap
-  152  ./oc get nodes -o wide
-  153  watch -n3 ./oc get nodes -o wide
-  154  ./oc get pods -A | grep Runn | wc -l
-  155  ./oc get pods -A
-  156  ./oc get nodes -o wide
-  157  ssh core@bootstrap
-  158  ssh core@master0
-  159  ssh-keygen -R master0
-  160  ssh core@master0
-  161  ssh core@master1
-  162  ssh-keygen -R master1
-  163  ssh core@master1
-  164  ssh core@master2
-  165  ssh-keygen -R master2
-  166  ssh core@master2
-  167  ./oc get nodes -o wide
-  168  export KUBECONFIG=/mnt/inst/auth/kubeconfig
-  169  ./oc get nodes -o wide
-  170  ./oc get pods -A
-  171  ./oc get pods -A | grep Runn | wc -l
-  172  ./oc get pods -A
-  173  ./oc get pods -A | grep Runn | wc -l
-  174  ./oc get pods -A
-  175  while true; do date; ./oc get pods -A ; sleep 3; done
-  176  while true; do date; ./oc get pods -A -o wide ; sleep 3; done
-  177  history
+# prepare oc command
+export KUBECONFIG=/mnt/inst/auth/kubeconfig
+tar xf /mnt/bin/openshift-client-linux-4.10.0-0.okd-2022-03-07-131213.tar.gz
+
+# check log
+./oc adm node-logs --role=master -u kubelet
+tail -f /mnt/inst/.openshift_install.log
+ssh-keygen -R bootstrap
+ssh core@bootstrap journalctl -b -f -u bootkube.service
+
+./oc get nodes
+./oc get nodes -o wide
+# about 100 pods became Running status
+./oc get pods -A | grep Runn | wc -l
 ```
 
 ## wait
